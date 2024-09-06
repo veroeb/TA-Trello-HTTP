@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor de Tareas</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="./styles/taskModal.css"> 
+  <link rel="stylesheet" href="./styles/kanbanColumns.css"> 
+  <link rel="stylesheet" href="./styles/main.css"> 
+</head>
+<body>
+
+  <section class="section">
+    <div class="container">
+      <div class="is-flex is-justify-content-space-between is-align-items-center">
+        <h1 class="title">Gestor de Tareas</h1>
+        <div class="is-flex is-flex-direction-column is-align-items-flex-end">
+          <div class="field">
+            <input type="checkbox" id="dark-mode-switch" class="dark-mode-switch">
+            <label for="dark-mode-switch">Dark Mode</label>
+          </div>
+          <button class="button is-primary" id="new-task-button" style="margin-top: 1rem;">Agregar Tarea</button>
+        </div>
+      </div>
+  
+      <div class="columns" id="task-columns" style="margin-top: 2rem;">
+      </div>
+    </div>
+  </section>
+  
+
+  <div class="modal" id="task-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title" id="modal-title">Nueva Tarea</p>
+        <button class="delete" aria-label="close" id="close-modal"></button>
+      </header>
+      <section class="modal-card-body">
+        <form id="task-form">
+        </form>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button" id="cancel-modal">Cancelar</button>
+        <button class="button is-success" id="save-task">Aceptar</button>
+      </footer>
+    </div>
+  </div>
+
+  <script type="module" src="./components/main.js"></script>
+</body>
+</html>
