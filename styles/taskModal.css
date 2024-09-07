@@ -35,6 +35,15 @@
   color: white;
   font-weight: bold;
   background-color: #8a4242;
+  height: 100%;
+}
+
+.modal-card-foot .delete-task-button {
+  background-color: #e74c3c;
+  color: white;
+  margin-right: auto;
+  width: 50px;
+  height: 100%;
 }
 
 .modal-card .field .control {

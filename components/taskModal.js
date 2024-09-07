@@ -27,7 +27,7 @@ export class TaskModal {
   // Function to format the date in dd/mm/yyyy format without altering the original value
   formatDateForJSON(dateString) {
     const [year, month, day] = dateString.split("-");
-    return `${day}/${month}/${year}`; // Convertir yyyy-mm-dd a dd/mm/yyyy
+    return `${day}/${month}/${year}`;
   }
 
   /**
@@ -84,23 +84,40 @@ export class TaskModal {
     // Appends the form fields to the form element
     const fieldContainer = document.createElement("div");
     fieldContainer.classList.add("columns", "is-multiline");
-
     fieldContainer.appendChild(this.wrapInColumn(titleInput));
     fieldContainer.appendChild(this.wrapInColumn(descriptionInput));
     fieldContainer.appendChild(this.wrapInColumn(assignedSelect));
     fieldContainer.appendChild(this.wrapInColumn(prioritySelect));
     fieldContainer.appendChild(this.wrapInColumn(statusSelect));
     fieldContainer.appendChild(this.wrapInColumn(endDateInput));
-
     this.taskFormElement.appendChild(fieldContainer);
 
-    // Adds the hidden id input if the task exists
+    const modalFooter = document.querySelector(".modal-card-foot");
+
+    // If the delete button exists, remove it
+    const existingDeleteButton = modalFooter.querySelector(
+      ".delete-task-button"
+    );
+    if (existingDeleteButton) {
+      existingDeleteButton.remove();
+    }
+
+    // If the task exists, add the id input and the delete button
     if (task) {
       const hiddenIdInput = document.createElement("input");
       hiddenIdInput.type = "hidden";
       hiddenIdInput.name = "id";
       hiddenIdInput.value = task.id;
       this.taskFormElement.appendChild(hiddenIdInput);
+
+      // Creates the delete button
+      const deleteButton = document.createElement("button");
+      deleteButton.classList.add("button", "is-danger", "delete-task-button");
+      deleteButton.innerHTML = `<i class="fas fa-trash"></i>`;
+      deleteButton.addEventListener("click", () => this.deleteTask(task.id));
+
+      // Inserts the delete button before the save button
+      modalFooter.insertBefore(deleteButton, modalFooter.firstChild);
     }
 
     this.modalElement.classList.add("is-active");
@@ -208,19 +225,19 @@ export class TaskModal {
     const formData = new FormData(this.taskFormElement);
 
     const orderedTaskData = {
-      id: formData.get("id") || Date.now().toString(), // Si no hay ID, genera uno nuevo para POST
+      id: formData.get("id") || Date.now().toString(),
       title: formData.get("title") || "",
       description: formData.get("description") || "",
       assignedTo: formData.get("assignedTo") || "",
-      startDate: formData.get("startDate") || "", // Si no tiene valor, lo deja vacío
+      startDate: formData.get("startDate") || "",
       endDate: formData.get("endDate")
         ? this.formatDateForJSON(formData.get("endDate"))
-        : "", // Formatear a dd/mm/yyyy
+        : "",
       status: formData.get("status") || "",
       priority: formData.get("priority") || "",
       comments: formData.get("comments")
         ? formData.get("comments").split(",")
-        : [], // Si no tiene comentarios, usa un array vacío
+        : [],
     };
 
     try {
@@ -272,6 +289,42 @@ export class TaskModal {
       this.onSave();
     } catch (error) {
       console.error("Error al guardar la tarea:", error);
+    }
+  }
+
+  /**
+   * Deletes the task from the server
+   * @param {string} taskId the id of the task to delete
+   * @returns void
+   * @example
+   * deleteTask("123456");
+   */
+  async deleteTask(taskId) {
+    const confirmation = confirm(
+      "¿Estás seguro de que deseas eliminar esta tarea?"
+    );
+    if (!confirmation) return;
+
+    try {
+      // Petition to delete the task
+      const response = await fetch(
+        `http://localhost:3000/api/tasks/${taskId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar la tarea");
+      }
+
+      // Reloads the page to update the tasks
+      window.location.reload();
+    } catch (error) {
+      console.error("Error al eliminar la tarea:", error);
     }
   }
 }
