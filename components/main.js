@@ -60,10 +60,21 @@ document.addEventListener("DOMContentLoaded", () => {
   themeSwitch.addEventListener("change", () => {
     if (themeSwitch.checked) {
       htmlElement.setAttribute("data-theme", "dark");
+      localStorage.setItem("theme", "dark");
     } else {
       htmlElement.setAttribute("data-theme", "light");
+      localStorage.setItem("theme", "light");
     }
   });
+
+  // Checks the theme based on the local storage
+  if (localStorage.getItem("theme") === "dark") {
+    htmlElement.setAttribute("data-theme", "dark");
+    themeSwitch.checked = true;
+  } else {
+    htmlElement.setAttribute("data-theme", "light");
+    themeSwitch.checked = false;
+  }
 
   // Checks the theme switch based on the data-theme attribute
   if (htmlElement.getAttribute("data-theme") === "dark") {
