@@ -65,7 +65,7 @@ body::before {
   height: 24px;
   left: 0;
   top: 0;
-  background-color: #31718d;
+  background-color: white;
   border-radius: 24px;
 }
 
@@ -74,7 +74,7 @@ body::before {
   height: 18px;
   left: 3px;
   top: 3px;
-  background-color: white;
+  background-color: #31718d;
   border-radius: 50%;
 }
 
@@ -84,6 +84,7 @@ body::before {
 
 .dark-mode-switch:checked + label:after {
   left: 19px;
+  background-color: white;
 }
 
 html[data-theme="light"] .section .title, html[data-theme="light"] .dark-mode-switch + label {
